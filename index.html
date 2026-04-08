@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI SDR Hero</title>
+    <style>
+      :root {
+        --bg: #f3f4f8;
+        --ink: #171d2d;
+        --muted: #4a4f61;
+        --brand: #1d2384;
+        --violet: #be43f0;
+        --blue: #2d89ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      .hero {
+        width: min(1200px, 95vw);
+        margin: 30px auto;
+        padding: 12px 12px 24px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        color: #40445d;
+        font-size: 14px;
+      }
+
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: var(--violet);
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--brand);
+        font-size: clamp(34px, 7.3vw, 76px);
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+      }
+
+      .highlight {
+        display: inline-block;
+        padding: 0.08em 0.18em;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #c74af1, #8c41f5);
+        color: #fff;
+      }
+
+      .word-box {
+        display: inline-block;
+        min-width: 0;
+        padding: 0.07em 0.2em 0.09em;
+        border-radius: 0;
+        background: #2f67dd;
+        color: #fff;
+        transform-origin: center bottom;
+        white-space: nowrap;
+      }
+
+      .word-box.is-bouncing {
+        animation: word-bounce 560ms cubic-bezier(0.2, 0.9, 0.22, 1);
+      }
+
+      @keyframes word-bounce {
+        0% {
+          transform: translateY(0) scale(1);
+        }
+        30% {
+          transform: translateY(-9px) scale(1.08);
+        }
+        55% {
+          transform: translateY(0) scale(0.97);
+        }
+        78% {
+          transform: translateY(-4px) scale(1.03);
+        }
+        100% {
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .subcopy {
+        margin: 18px 0 28px;
+        max-width: 560px;
+        color: var(--muted);
+        font-size: 32px;
+        line-height: 1.35;
+      }
+
+      .lead-panel {
+        background: #fff;
+        border: 2px solid #2f67dd;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 14px 36px rgba(17, 31, 66, 0.12);
+      }
+
+      .panel-top {
+        padding: 16px;
+        border-bottom: 1px solid #dbe3fb;
+        background: #f8faff;
+      }
+
+      .capacity-box {
+        border: 1px solid #d7e0f8;
+        border-radius: 12px;
+        padding: 14px;
+        text-align: center;
+      }
+
+      .capacity-box p {
+        margin: 0 0 12px;
+        color: #2d3448;
+        font-weight: 500;
+      }
+
+      .slot-row {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .slot {
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        border: 2px solid;
+        font-size: 14px;
+        line-height: 20px;
+        text-align: center;
+        font-weight: 700;
+      }
+
+      .slot.taken {
+        color: #db4d52;
+        border-color: #db4d52;
+      }
+
+      .slot.open {
+        color: #31a766;
+        border-color: #31a766;
+      }
+
+      .capacity-note {
+        margin: 0;
+        font-size: 13px;
+        color: #5d667f;
+      }
+
+      .panel-body {
+        padding: 12px 16px 8px;
+      }
+
+      .panel-body h2 {
+        margin: 0 0 8px;
+        text-align: center;
+        font-size: clamp(28px, 3.5vw, 42px);
+        line-height: 1.05;
+        color: #131a2f;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(120px, 1fr));
+        gap: 24px;
+        margin-top: 28px;
+      }
+
+      .stat strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--violet);
+        font-size: clamp(30px, 4vw, 54px);
+        line-height: 1;
+      }
+
+      .stat span {
+        color: #5b6070;
+        font-size: 18px;
+      }
+
+      .sales-output {
+        margin-top: 44px;
+      }
+
+      .sales-output h2 {
+        margin: 0 0 22px;
+        text-align: center;
+        color: #122f86;
+        font-size: clamp(28px, 4.1vw, 58px);
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+      }
+
+      .sales-output h2 .muted-tail {
+        color: var(--muted);
+      }
+
+      .sales-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .sales-card {
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid #cfd7ee;
+        background: #fff;
+        box-shadow: 0 10px 28px rgba(15, 28, 54, 0.09);
+      }
+
+      .sales-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      .left-stack {
+        display: grid;
+        gap: 18px;
+      }
+
+      .sales-card.left-card {
+        position: relative;
+      }
+
+      .sales-copy {
+        padding: 26px 24px;
+        border-radius: 24px;
+        background: #112f90;
+        color: #fff;
+        box-shadow: 0 10px 28px rgba(15, 28, 54, 0.16);
+      }
+
+      .sales-copy h3 {
+        margin: 0 0 12px;
+        font-size: clamp(26px, 2.8vw, 44px);
+        line-height: 1.04;
+      }
+
+      .sales-copy p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 22px;
+        line-height: 1.25;
+      }
+
+      .sales-copy-image {
+        margin-top: 16px;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .sales-copy-image img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      @media (max-width: 980px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+          gap: 14px;
+        }
+
+        .lead-panel {
+          margin-top: 0;
+        }
+
+        .sales-grid {
+          grid-template-columns: 1fr;
+        }
+
+      }
+
+      @media (max-width: 740px) {
+        h1 {
+          line-height: 1;
+        }
+
+        .subcopy {
+          font-size: 20px;
+          margin-bottom: 12px;
+        }
+
+        .panel-top {
+          padding: 10px 12px 8px;
+        }
+
+        .capacity-box {
+          padding: 10px;
+        }
+
+        .capacity-box p {
+          margin: 0 0 8px;
+        }
+
+        .slot-row {
+          margin-bottom: 6px;
+          gap: 6px;
+        }
+
+        .slot {
+          width: 21px;
+          height: 21px;
+          line-height: 17px;
+        }
+
+        .stats {
+          grid-template-columns: repeat(2, minmax(120px, 1fr));
+          gap: 16px;
+        }
+
+        .sales-output {
+          margin-top: 30px;
+        }
+
+        .sales-copy p {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="hero">
+      <section class="hero-grid">
+        <article>
+          <p class="eyebrow"><span class="dot"></span>For businesses that want more booked calls</p>
+          <h1>
+            24/7 AI SDR<br />
+            That Sits In Your Inbox<br />
+            And Books Your Next<br />
+            <span id="rotating-word" class="word-box">Demo</span> Instantly.
+          </h1>
+          <p class="subcopy">
+            The AI SDR which sounds human, qualifies every lead, responds instantly and books them
+            into your calendar - 24/7.
+          </p>
+        </article>
+
+        <aside class="lead-panel">
+          <div class="panel-top">
+            <div class="capacity-box">
+              <p>Client Capacity available for today:</p>
+              <div class="slot-row">
+                <span class="slot taken">x</span>
+                <span class="slot taken">x</span>
+                <span class="slot taken">x</span>
+                <span class="slot taken">x</span>
+                <span class="slot taken">x</span>
+                <span class="slot taken">x</span>
+                <span class="slot taken">x</span>
+                <span class="slot open">✓</span>
+                <span class="slot open">✓</span>
+              </div>
+              <p class="capacity-note">Only 2 demo slots left today. Secure yours now.</p>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <h2>Schedule Your Demo</h2>
+            <!-- Calendly inline widget begin -->
+            <div
+              class="calendly-inline-widget"
+              data-url="https://calendly.com/alex-lee-deal-closer/done-for-you-website-build-out?hide_event_type_details=1&hide_gdpr_banner=1"
+              style="min-width: 320px; height: 610px"
+            ></div>
+            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+            <!-- Calendly inline widget end -->
+          </div>
+        </aside>
+      </section>
+
+      <section class="stats">
+        <article class="stat"><strong>6400+</strong><span>AI Setters Deployed</span></article>
+        <article class="stat"><strong>61%</strong><span>Response Rate</span></article>
+        <article class="stat"><strong>101K</strong><span>Appointments Booked</span></article>
+        <article class="stat"><strong>471K</strong><span>Conversations Handled</span></article>
+      </section>
+
+      <section class="sales-output">
+        <h2>
+          How we can increase your sales output
+          <span class="muted-tail">without hiring more SDRs.</span>
+        </h2>
+        <div class="sales-grid">
+          <div class="left-stack">
+            <article class="sales-copy">
+              <h3>Built to qualify and route fast.</h3>
+              <p>
+                Configure call handlers, provide knowledge context, and automate responses so your
+                team books more meetings without hiring extra SDRs.
+              </p>
+              <div class="sales-copy-image">
+                <img src="images/Screenshot 2026-04-08 at 13.46.29.png" alt="AI SDR dashboard preview" />
+              </div>
+            </article>
+            <article class="sales-copy">
+              <h3>Turn silence into sales with your resource library.</h3>
+              <p>
+                Attach case studies, testimonials, and proof assets so your AI SDR automatically
+                sends the right content to prospects who go quiet, building trust and credibility on
+                autopilot to bring them back into the conversation.
+              </p>
+              <div class="sales-copy-image">
+                <img src="images/Screenshot 2026-04-08 at 13.46.39.png" alt="AI SDR resources settings" />
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script>
+      (function () {
+        var words = ["DEMO", "CALL", "MEETING"];
+        var currentIndex = 0;
+        var rotatingEl = document.getElementById("rotating-word");
+        if (!rotatingEl) return;
+
+        setInterval(function () {
+          currentIndex = (currentIndex + 1) % words.length;
+          rotatingEl.textContent = words[currentIndex];
+          rotatingEl.classList.remove("is-bouncing");
+          void rotatingEl.offsetWidth;
+          rotatingEl.classList.add("is-bouncing");
+        }, 3000);
+      })();
+    </script>
+  </body>
+</html>
