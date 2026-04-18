@@ -531,6 +531,15 @@
         .proof-cta-mobile {
           display: block;
         }
+
+        .hero-grid > article {
+          text-align: center;
+        }
+
+        .hero-grid > article .subcopy {
+          margin-left: auto;
+          margin-right: auto;
+        }
       }
     </style>
     <script type="text/javascript">
@@ -556,9 +565,17 @@
             The AI SDR which sounds human, qualifies every lead, responds instantly and books them
             into your calendar - 24/7.
           </p>
+          <button
+            class="demo-cta proof-cta-mobile hero-subcopy-demo-cta"
+            type="button"
+            aria-label="Scroll to schedule your demo"
+          >
+            <strong>SCHEDULE MY DEMO CALL</strong>
+            <span>And Start Saving $93,000+ Per Year</span>
+          </button>
         </article>
 
-        <aside class="lead-panel">
+        <aside class="lead-panel" id="lead-panel">
           <div class="panel-top">
             <div class="capacity-box">
               <p>Client Capacity available for today:</p>
@@ -744,6 +761,15 @@
           void rotatingEl.offsetWidth;
           rotatingEl.classList.add("is-bouncing");
         }, 3000);
+      })();
+
+      (function () {
+        var btn = document.querySelector(".hero-subcopy-demo-cta");
+        var target = document.getElementById("lead-panel");
+        if (!btn || !target) return;
+        btn.addEventListener("click", function () {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
       })();
 
       (function () {
