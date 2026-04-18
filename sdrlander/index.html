@@ -890,6 +890,8 @@
         var openButtons = document.querySelectorAll("[data-open-calendly='true']");
         var BASE_CALENDLY_URL =
           "https://calendly.com/alex-lee-deal-closer/onboarding?hide_event_type_details=1&hide_gdpr_banner=1";
+        var OPTIN_WEBHOOK_URL =
+          "https://services.leadconnectorhq.com/hooks/zPe2QgLrXNtXe0surepg/webhook-trigger/3124b5a3-7bb5-4728-a01d-9ceb53e6a8b3";
 
         if (!modal || !closeBtn || !widgetEl) return;
 
@@ -968,6 +970,11 @@
               encodeURIComponent(name) +
               "&email=" +
               encodeURIComponent(email);
+            fetch(OPTIN_WEBHOOK_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name: name, email: email }),
+            }).catch(function () {});
             openModal(prefilledUrl);
           });
         }
