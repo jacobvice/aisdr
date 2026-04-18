@@ -970,10 +970,20 @@
               encodeURIComponent(name) +
               "&email=" +
               encodeURIComponent(email);
+            var pageParams = new URLSearchParams(window.location.search);
+            var fbc_id = pageParams.get("fbc_id") || "";
+            var h_ad_id = pageParams.get("h_ad_id") || "";
+            var utm_campaign = pageParams.get("utm_campaign") || "";
             fetch(OPTIN_WEBHOOK_URL, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ name: name, email: email }),
+              body: JSON.stringify({
+                name: name,
+                email: email,
+                fbc_id: fbc_id,
+                h_ad_id: h_ad_id,
+                utm_campaign: utm_campaign,
+              }),
             }).catch(function () {});
             openModal(prefilledUrl);
           });
