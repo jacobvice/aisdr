@@ -214,6 +214,55 @@
         color: #131a2f;
       }
 
+      .panel-optin-form {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .panel-optin-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        text-align: left;
+      }
+
+      .panel-optin-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2d3448;
+        letter-spacing: 0.01em;
+      }
+
+      .panel-optin-required {
+        color: #c43d4a;
+        font-weight: 700;
+      }
+
+      .panel-optin-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        border: 1px solid #d7e0f8;
+        border-radius: 12px;
+        background: #fff;
+        font: inherit;
+        font-size: 16px;
+        color: #131a2f;
+        outline: none;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .panel-optin-input::placeholder {
+        color: #8b93a8;
+      }
+
+      .panel-optin-input:focus {
+        border-color: #2b6ff0;
+        box-shadow: 0 0 0 3px rgba(47, 125, 243, 0.18);
+      }
+
       .demo-cta {
         margin: 10px 0 14px;
         border: 2px solid #2b6ff0;
@@ -615,10 +664,43 @@
 
           <div class="panel-body">
             <h2>ONLY A FEW SPOTS LEFT TODAY</h2>
-            <button class="demo-cta" type="button" id="open-calendly-modal">
-              <strong>SCHEDULE MY DEMO CALL</strong>
-              <span>And Start Saving $93,000+ Per Year</span>
-            </button>
+            <form id="lead-optin-form" class="panel-optin-form" autocomplete="on" novalidate>
+              <div class="panel-optin-field">
+                <label class="panel-optin-label" for="lead-full-name"
+                  >Full Name <span class="panel-optin-required" aria-hidden="true">*</span></label
+                >
+                <input
+                  id="lead-full-name"
+                  class="panel-optin-input"
+                  name="fullName"
+                  type="text"
+                  autocomplete="name"
+                  placeholder="Jane Smith"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div class="panel-optin-field">
+                <label class="panel-optin-label" for="lead-email"
+                  >Email Address <span class="panel-optin-required" aria-hidden="true">*</span></label
+                >
+                <input
+                  id="lead-email"
+                  class="panel-optin-input"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="you@company.com"
+                  required
+                  aria-required="true"
+                  inputmode="email"
+                />
+              </div>
+              <button class="demo-cta" type="submit">
+                <strong>SCHEDULE MY DEMO CALL</strong>
+                <span>And Start Saving $93,000+ Per Year</span>
+              </button>
+            </form>
           </div>
         </aside>
       </section>
@@ -766,6 +848,7 @@
         </div>
         <div class="calendly-modal-body">
           <div
+            id="calendly-inline-widget"
             class="calendly-inline-widget"
             data-url="https://calendly.com/alex-lee-deal-closer/onboarding?hide_event_type_details=1&hide_gdpr_banner=1"
             style="min-width: 320px; height: 700px"
@@ -801,17 +884,43 @@
 
       (function () {
         var modal = document.getElementById("calendly-modal");
-        var openButtons = document.querySelectorAll("#open-calendly-modal, [data-open-calendly='true']");
         var closeBtn = document.getElementById("close-calendly-modal");
-        if (!modal || !openButtons.length || !closeBtn) return;
+        var widgetEl = document.getElementById("calendly-inline-widget");
+        var optinForm = document.getElementById("lead-optin-form");
+        var openButtons = document.querySelectorAll("[data-open-calendly='true']");
+        var BASE_CALENDLY_URL =
+          "https://calendly.com/alex-lee-deal-closer/onboarding?hide_event_type_details=1&hide_gdpr_banner=1";
 
-        function openModal() {
+        if (!modal || !closeBtn || !widgetEl) return;
+
+        function renderCalendlyWidget(url) {
+          widgetEl.setAttribute("data-url", url);
+          widgetEl.innerHTML = "";
+          function tryInit() {
+            if (window.Calendly && typeof window.Calendly.initInlineWidget === "function") {
+              window.Calendly.initInlineWidget({ url: url, parentElement: widgetEl });
+              return true;
+            }
+            if (window.Calendly && typeof window.Calendly.initInlineWidgets === "function") {
+              window.Calendly.initInlineWidgets();
+              return true;
+            }
+            return false;
+          }
+          if (!tryInit()) {
+            var waited = 0;
+            var poll = setInterval(function () {
+              waited += 50;
+              if (tryInit() || waited > 12000) clearInterval(poll);
+            }, 50);
+          }
+        }
+
+        function openModal(url) {
+          renderCalendlyWidget(url || BASE_CALENDLY_URL);
           modal.classList.add("is-open");
           modal.setAttribute("aria-hidden", "false");
           document.body.style.overflow = "hidden";
-          if (window.Calendly && typeof window.Calendly.initInlineWidgets === "function") {
-            window.Calendly.initInlineWidgets();
-          }
         }
 
         function closeModal() {
@@ -821,8 +930,48 @@
         }
 
         openButtons.forEach(function (button) {
-          button.addEventListener("click", openModal);
+          button.addEventListener("click", function () {
+            openModal(BASE_CALENDLY_URL);
+          });
         });
+
+        if (optinForm) {
+          var optinName = optinForm.querySelector('[name="fullName"]');
+          var optinEmail = optinForm.querySelector('[name="email"]');
+          if (optinName) {
+            optinName.addEventListener("input", function () {
+              optinName.setCustomValidity("");
+            });
+          }
+          if (optinEmail) {
+            optinEmail.addEventListener("input", function () {
+              optinEmail.setCustomValidity("");
+            });
+          }
+          optinForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            var nameInput = optinForm.querySelector('[name="fullName"]');
+            var emailInput = optinForm.querySelector('[name="email"]');
+            if (!nameInput || !emailInput) return;
+            nameInput.setCustomValidity(
+              nameInput.value.trim() === "" ? "Please enter your full name." : ""
+            );
+            emailInput.setCustomValidity(
+              emailInput.value.trim() === "" ? "Please enter your email address." : ""
+            );
+            if (!optinForm.reportValidity()) return;
+            var name = nameInput.value.trim();
+            var email = emailInput.value.trim();
+            var prefilledUrl =
+              BASE_CALENDLY_URL +
+              "&name=" +
+              encodeURIComponent(name) +
+              "&email=" +
+              encodeURIComponent(email);
+            openModal(prefilledUrl);
+          });
+        }
+
         closeBtn.addEventListener("click", closeModal);
         modal.addEventListener("click", function (event) {
           if (event.target === modal) closeModal();
