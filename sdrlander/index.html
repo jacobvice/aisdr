@@ -662,7 +662,7 @@
             </div>
           </div>
 
-          <div class="panel-body">
+          <div class="panel-body" id="lead-panel-body">
             <h2>ONLY A FEW SPOTS LEFT TODAY</h2>
             <form id="lead-optin-form" class="panel-optin-form" autocomplete="on" novalidate>
               <div class="panel-optin-field">
@@ -726,7 +726,11 @@
         <article class="proof-mobile-tile top-right">
           <img src="images/Screenshot 2026-04-08 at 15.36.21.png" alt="Higher booking rates proof" />
         </article>
-        <button class="demo-cta proof-cta-mobile" type="button" data-open-calendly="true">
+        <button
+          class="demo-cta proof-cta-mobile proof-cta-scroll-to-optin"
+          type="button"
+          aria-label="Scroll to schedule your demo"
+        >
           <strong>SCHEDULE MY DEMO CALL</strong>
           <span>And Start Saving $93,000+ Per Year</span>
         </button>
@@ -876,6 +880,15 @@
       (function () {
         var btn = document.querySelector(".hero-subcopy-demo-cta");
         var target = document.getElementById("lead-panel");
+        if (!btn || !target) return;
+        btn.addEventListener("click", function () {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      })();
+
+      (function () {
+        var btn = document.querySelector(".proof-cta-scroll-to-optin");
+        var target = document.getElementById("lead-panel-body");
         if (!btn || !target) return;
         btn.addEventListener("click", function () {
           target.scrollIntoView({ behavior: "smooth", block: "start" });
