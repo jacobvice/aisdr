@@ -395,6 +395,7 @@
           gap: 0.2em;
           line-height: 1.18;
           font-size: clamp(26px, 7vw, 44px);
+          margin-bottom: 16px;
         }
 
         .hero-title-row {
@@ -403,7 +404,7 @@
 
         .subcopy {
           font-size: 20px;
-          margin-bottom: 12px;
+          margin: 0 0 16px;
         }
 
         .panel-top {
@@ -448,6 +449,7 @@
 
         .proof-cta-mobile {
           display: block;
+          margin-top: 0;
         }
 
         .hero-grid > article {
@@ -474,14 +476,11 @@
         <article>
           <p class="eyebrow hero-eyebrow"><span class="dot"></span>For businesses that want more booked calls</p>
           <h1 class="hero-title">
-            <span class="hero-title-row">24/7 AI SDR</span>
-            <span class="hero-title-row">That Sits In Your Inbox</span>
-            <span class="hero-title-row">And Books Your Next</span>
-            <span class="hero-title-row"><span id="rotating-word" class="word-box">Demo</span> Instantly.</span>
+            IN 30 DAYS WE'LL DOUBLE YOUR BOOKED CALLS AND HALVE YOUR SDR COSTS, OR YOU DON'T PAY.
           </h1>
           <p class="subcopy">
-            The AI SDR which sounds human, qualifies every lead, responds instantly and books them
-            into your calendar - 24/7.
+            Instead of paying $93,000+ a year for SDRs who sell 2 hours a day, we install an AI that
+            fills your calendar and halves your payroll.
           </p>
           <button
             class="demo-cta proof-cta-mobile"
@@ -489,7 +488,7 @@
             data-open-calendly="true"
             aria-label="Schedule your demo call"
           >
-            <strong>SCHEDULE MY DEMO CALL</strong>
+            <strong>Click Here To Get Started</strong>
             <span>And Start Saving $93,000+ Per Year</span>
           </button>
         </article>
@@ -530,7 +529,7 @@
               data-open-calendly="true"
               aria-label="Schedule your demo call"
             >
-              <strong>SCHEDULE MY DEMO CALL</strong>
+              <strong>Click Here To Get Started</strong>
               <span>And Start Saving $93,000+ Per Year</span>
             </button>
           </div>
@@ -554,7 +553,7 @@
         />
       </section>
       <button class="demo-cta proof-cta" type="button" data-open-calendly="true">
-        <strong>SCHEDULE MY DEMO CALL</strong>
+        <strong>Click Here To Get Started</strong>
         <span>And Start Saving $93,000+ Per Year</span>
       </button>
       <section class="proof-mobile-grid" aria-label="Performance proof screenshots">
@@ -570,7 +569,7 @@
           data-open-calendly="true"
           aria-label="Schedule your demo call"
         >
-          <strong>SCHEDULE MY DEMO CALL</strong>
+          <strong>Click Here To Get Started</strong>
           <span>And Start Saving $93,000+ Per Year</span>
         </button>
       </section>
@@ -593,21 +592,6 @@
       </div>
     </div>
     <script>
-      (function () {
-        var words = ["DEMO", "CALL", "MEETING"];
-        var currentIndex = 0;
-        var rotatingEl = document.getElementById("rotating-word");
-        if (!rotatingEl) return;
-
-        setInterval(function () {
-          currentIndex = (currentIndex + 1) % words.length;
-          rotatingEl.textContent = words[currentIndex];
-          rotatingEl.classList.remove("is-bouncing");
-          void rotatingEl.offsetWidth;
-          rotatingEl.classList.add("is-bouncing");
-        }, 3000);
-      })();
-
       (function () {
         var modal = document.getElementById("calendly-modal");
         var closeBtn = document.getElementById("close-calendly-modal");
