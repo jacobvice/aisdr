@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
     <title>AI SDR Hero</title>
     <style>
       :root {
@@ -22,7 +23,7 @@
         margin: 0;
         background: var(--bg);
         color: var(--ink);
-        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       }
 
       .hero {
@@ -316,6 +317,12 @@
         height: auto;
       }
 
+      @media (max-width: 768px) {
+        .desktop-proof-img {
+          display: none;
+        }
+      }
+
       .proof-cta {
         margin-top: 16px;
       }
@@ -506,8 +513,11 @@
             </div>
             <div class="feature-box">
               <img
-                src="images/5dc06d2f-5665-4669-853d-5eb12fe77f6c.png"
+                src="images/5dc06d2f-5665-4669-853d-5eb12fe77f6c.webp"
                 alt="AI SDR inbox multi-device preview"
+                fetchpriority="high"
+                width="317"
+                height="177"
               />
             </div>
           </div>
@@ -535,7 +545,13 @@
       </section>
 
       <section class="proof-shot">
-        <img src="images/Screenshot 2026-04-08 at 15.36.21.png" alt="Performance proof screenshots grid" />
+        <img
+          class="desktop-proof-img"
+          src="images/Screenshot 2026-04-08 at 15.36.21.webp"
+          alt="Performance proof screenshots grid"
+          width="731"
+          height="480"
+        />
       </section>
       <button class="demo-cta proof-cta" type="button" data-open-calendly="true">
         <strong>SCHEDULE MY DEMO CALL</strong>
@@ -543,10 +559,10 @@
       </button>
       <section class="proof-mobile-grid" aria-label="Performance proof screenshots">
         <article class="proof-mobile-tile top-left">
-          <img src="images/Screenshot 2026-04-08 at 15.36.21.png" alt="Instant replies proof" />
+          <img src="images/Screenshot 2026-04-08 at 15.36.21.webp" alt="Instant replies proof" />
         </article>
         <article class="proof-mobile-tile top-right">
-          <img src="images/Screenshot 2026-04-08 at 15.36.21.png" alt="Higher booking rates proof" />
+          <img src="images/Screenshot 2026-04-08 at 15.36.21.webp" alt="Higher booking rates proof" />
         </article>
         <button
           class="demo-cta proof-cta-mobile"
@@ -576,7 +592,6 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
     <script>
       (function () {
         var words = ["DEMO", "CALL", "MEETING"];
@@ -600,8 +615,30 @@
         var openButtons = document.querySelectorAll("[data-open-calendly='true']");
         var BASE_CALENDLY_URL =
           "https://calendly.com/alex-lee-deal-closer/onboarding?hide_event_type_details=1&hide_gdpr_banner=1";
+        var calendlyScriptPromise = null;
 
         if (!modal || !closeBtn || !widgetEl) return;
+
+        function loadCalendlyScript() {
+          if (window.Calendly) return Promise.resolve();
+          if (calendlyScriptPromise) return calendlyScriptPromise;
+
+          calendlyScriptPromise = new Promise(function (resolve, reject) {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "https://assets.calendly.com/assets/external/widget.js";
+            script.async = true;
+            script.onload = function () {
+              resolve();
+            };
+            script.onerror = function () {
+              reject(new Error("Failed to load Calendly widget script."));
+            };
+            document.body.appendChild(script);
+          });
+
+          return calendlyScriptPromise;
+        }
 
         function renderCalendlyWidget(url) {
           widgetEl.setAttribute("data-url", url);
@@ -627,10 +664,16 @@
         }
 
         function openModal(url) {
-          renderCalendlyWidget(url || BASE_CALENDLY_URL);
-          modal.classList.add("is-open");
-          modal.setAttribute("aria-hidden", "false");
-          document.body.style.overflow = "hidden";
+          loadCalendlyScript()
+            .then(function () {
+              renderCalendlyWidget(url || BASE_CALENDLY_URL);
+              modal.classList.add("is-open");
+              modal.setAttribute("aria-hidden", "false");
+              document.body.style.overflow = "hidden";
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
         }
 
         function closeModal() {
